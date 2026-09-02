@@ -1,0 +1,205 @@
+**Step 2.**
+
+# Step 2 — Create the Joogle Flow application
+
+We're going to make the first real version:
+
+```text
+Joogle Flow
+├── Frontend → what you see in the browser
+└── Backend  → handles data and accounts
+```
+
+## 2.1 Create the frontend
+
+Open PowerShell and run:
+
+```powershell
+cd C:\JoogleFlow
+cd frontend
+npm create vite@latest . -- --template react
+```
+
+When it asks whether to continue, choose **Yes**.
+
+Then:
+
+```powershell
+npm install
+```
+
+And start it:
+
+```powershell
+npm run dev
+```
+
+You should get something like:
+
+```text
+Local: http://localhost:5173/
+```
+
+Open that address in your browser.
+
+You should see the default **Vite + React** page.
+
+---
+
+## 2.2 Stop the server
+
+Go back to PowerShell and press:
+
+```text
+CTRL + C
+```
+
+We're going to replace the default Vite page with **Joogle Flow**.
+
+---
+
+## 2.3 Create the backend
+
+Open a **new PowerShell window**:
+
+```powershell
+cd C:\JoogleFlow\backend
+```
+
+Create a Python virtual environment:
+
+```powershell
+python -m venv venv
+```
+
+Activate it:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks it with an execution-policy error, tell me the exact error rather than changing security settings yourself.
+
+Install FastAPI:
+
+```powershell
+pip install fastapi uvicorn
+```
+
+---
+
+## 2.4 Create `main.py`
+
+Run:
+
+```powershell
+notepad main.py
+```
+
+Paste:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI(title="Joogle Flow API")
+
+
+@app.get("/")
+def root():
+    return {
+        "name": "Joogle Flow",
+        "status": "online"
+    }
+
+
+@app.get("/api/hello")
+def hello():
+    return {
+        "message": "Hello from Joogle Flow!"
+    }
+```
+
+Save and close Notepad.
+
+---
+
+## 2.5 Start the backend
+
+In the same PowerShell window:
+
+```powershell
+uvicorn main:app --reload
+```
+
+You should see:
+
+```text
+Uvicorn running on http://127.0.0.1:8000
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
+You should see:
+
+```text
+{
+  "name": "Joogle Flow",
+  "status": "online"
+}
+```
+
+Then try:
+
+```text
+http://127.0.0.1:8000/api/hello
+```
+
+You should see:
+
+```text
+{
+  "message": "Hello from Joogle Flow!"
+}
+```
+
+---
+
+# What we've got now
+
+```text
+C:\JoogleFlow
+│
+├── frontend
+│   ├── React
+│   ├── Vite
+│   └── package.json
+│
+├── backend
+│   ├── venv
+│   ├── main.py
+│   └── requirements
+│
+├── data
+├── storage
+└── wireguard
+```
+
+And two working services:
+
+```text
+Frontend
+http://localhost:5173
+       │
+       │
+       ▼
+Backend API
+http://localhost:8000
+```
+
+**Don't set up WireGuard yet.** We want the application working locally first; then we'll put the VPN in front of it.
+
+Once you've got both URLs working, we'll do **Step 3 — build the actual Joogle Flow interface**.
